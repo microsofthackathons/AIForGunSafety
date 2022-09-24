@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "appInsights1": {
+      "type": "appInsights.sdk"
+    },
+    "storage1": {
+      "type": "storage.emulator",
+      "connectionId": "AzureWebJobsStorage"
+    },
+    "secrets1": {
+      "type": "secrets.user"
+    },
+    "cosmosdb1": {
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.DocumentDB/databaseAccounts/hackathon22",
+      "type": "cosmosdb.azure",
+      "connectionId": "CosmosDBConnection",
+      "dynamicId": null
+    },
+    "cosmosdb2": {
+      "secretStore": null,
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.DocumentDB/databaseAccounts/hackathon22",
+      "type": "cosmosdb.azure",
+      "connectionId": "CosmosDBConnection",
+      "dynamicId": null
+    }
+  }
+}
