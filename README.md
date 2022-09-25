@@ -1,3 +1,6 @@
+
+[![CodeQL](https://github.com/microsofthackathons/AIForGunSafety/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/microsofthackathons/AIForGunSafety/actions/workflows/codeql-analysis.yml)
+
 # Gun Threat Detection from Social Media: 
 
 This repo contains the code related to leveraging AI for gun safety. 
