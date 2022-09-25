@@ -16,11 +16,23 @@ using System.ComponentModel;
 using Microsoft.Azure.Cosmos;
 using Container = Microsoft.Azure.Cosmos.Container;
 using Microsoft.Azure.Cosmos.Serialization.HybridRow.RecordIO;
+using System.Configuration;
 
 namespace AIForGunSafetyFunctionApp.Services
 {
+   
     public class TwitterService
     {
+        private string _cosmosConnectionString;
+        private string _twitterAuthKey;
+        private string _sbConnectionString;
+        public TwitterService()
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+            _cosmosConnectionString = appSettings["CosmosDBConnection"].ToString();
+            _twitterAuthKey = appSettings["TwitterAuthKey"].ToString();
+            _sbConnectionString = appSettings["SBUS_CONNECTIONSTRING"].ToString();
+        }
         public async Task ConsumeSocialMediaPosts()
         {
 
@@ -35,7 +47,7 @@ namespace AIForGunSafetyFunctionApp.Services
 
         public async Task AddMessageToServiceBusQueue(string queueName, string jsonString)
         {
-            string connectionString = $"Endpoint=sb://aigunsafetyhackathon.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=q1DvmcyakLVVraez5T+pAQj4Sgq6m1/Go9cvzdhXqM4=;EntityPath={queueName}";
+            //string connectionString = $"Endpoint=sb://aigunsafetyhackathon.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=q1DvmcyakLVVraez5T+pAQj4Sgq6m1/Go9cvzdhXqM4=;EntityPath={queueName}";
 
             // the client that owns the connection and can be used to create senders and receivers
             ServiceBusClient client;
@@ -44,7 +56,7 @@ namespace AIForGunSafetyFunctionApp.Services
             ServiceBusSender sender;
 
             var clientOptions = new ServiceBusClientOptions() { TransportType = ServiceBusTransportType.AmqpWebSockets };
-            client = new ServiceBusClient(connectionString, clientOptions);
+            client = new ServiceBusClient(_sbConnectionString, clientOptions);
             sender = client.CreateSender(queueName);
 
             await sender.SendMessageAsync(new ServiceBusMessage(jsonString));
@@ -66,7 +78,7 @@ namespace AIForGunSafetyFunctionApp.Services
             records = tweets.metadata.result_count;
 
             var latestTweetPull = await AddLatestTweetId(updatedSinceId);
-            
+
 
             await PostMessageInQueue(tweets);
 
@@ -92,7 +104,7 @@ namespace AIForGunSafetyFunctionApp.Services
             if (!string.IsNullOrEmpty(sinceId)) url = url + "&since_id=" + sinceId;
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
-            var authString = "AAAAAAAAAAAAAAAAAAAAABqvhAEAAAAA8XLgGmDV%2Fn7GT3zdTKKlHpjgnyw%3DPiVP5BHYHWVAj7NYhBwYFcdYjZIbV30eHlNAjHMepu5j9HElRo";
+            var authString = _twitterAuthKey;
             request.Headers.Add("Authorization", $"Bearer {authString}");
             request.Headers.Add("Accept", "application/json");
 
@@ -118,7 +130,7 @@ namespace AIForGunSafetyFunctionApp.Services
             var url = client.BaseAddress + "?ids=" + twitterUserId + "&user.fields=created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,url,username,verified,withheld";
 
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, url);
-            var authString = "AAAAAAAAAAAAAAAAAAAAABqvhAEAAAAA8XLgGmDV%2Fn7GT3zdTKKlHpjgnyw%3DPiVP5BHYHWVAj7NYhBwYFcdYjZIbV30eHlNAjHMepu5j9HElRo";
+            var authString = _twitterAuthKey;
             request.Headers.Add("Authorization", $"Bearer {authString}");
             request.Headers.Add("Accept", "application/json");
 
@@ -151,16 +163,16 @@ namespace AIForGunSafetyFunctionApp.Services
         {
             string recentId = "";
             // The Azure Cosmos DB endpoint for running this sample.
-            string EndpointUri = @"https://hackathon22.documents.azure.com:443/";
+            //string EndpointUri = @"https://hackathon22.documents.azure.com:443/";
 
             // The primary key for the Azure Cosmos account.
-            string PrimaryKey = "bjRSRtPRWmqyinuTOtlna0rkOzAdpZtX5ZMWPPyJLudIfeqw8Fzn2RA2hIu7q9ed59NOqSQ4trUYUnaEhKaIzA==";
+            //string PrimaryKey = "bjRSRtPRWmqyinuTOtlna0rkOzAdpZtX5ZMWPPyJLudIfeqw8Fzn2RA2hIu7q9ed59NOqSQ4trUYUnaEhKaIzA==";
 
             string databaseId = "temp-db";
             string containerId = "latesttweet";
 
             // The Cosmos client instance
-            CosmosClient cosmosClient = new CosmosClient(EndpointUri, PrimaryKey, new CosmosClientOptions() { ApplicationName = "CosmosDBDotnetQuickstart" });
+            CosmosClient cosmosClient = new CosmosClient(_cosmosConnectionString, new CosmosClientOptions() { ApplicationName = "CosmosDBDotnetQuickstart" });
 
             // The database we will create
             Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
@@ -195,16 +207,16 @@ namespace AIForGunSafetyFunctionApp.Services
         private async Task UpdateLatestTweetId(LatestTweet latestTweet)
         {
             // The Azure Cosmos DB endpoint for running this sample.
-            string EndpointUri = @"https://hackathon22.documents.azure.com:443/";
+            //string EndpointUri = @"https://hackathon22.documents.azure.com:443/";
 
             // The primary key for the Azure Cosmos account.
-            string PrimaryKey = "bjRSRtPRWmqyinuTOtlna0rkOzAdpZtX5ZMWPPyJLudIfeqw8Fzn2RA2hIu7q9ed59NOqSQ4trUYUnaEhKaIzA==";
+            //string PrimaryKey = "bjRSRtPRWmqyinuTOtlna0rkOzAdpZtX5ZMWPPyJLudIfeqw8Fzn2RA2hIu7q9ed59NOqSQ4trUYUnaEhKaIzA==";
 
             string databaseId = "temp-db";
             string containerId = "latesttweet";
 
             // The Cosmos client instance
-            CosmosClient cosmosClient = new CosmosClient(EndpointUri, PrimaryKey, new CosmosClientOptions() { ApplicationName = "CosmosDBDotnetQuickstart" });
+            CosmosClient cosmosClient = new CosmosClient(_cosmosConnectionString, new CosmosClientOptions() { ApplicationName = "CosmosDBDotnetQuickstart" });
 
             // The database we will create
             Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);
@@ -226,16 +238,16 @@ namespace AIForGunSafetyFunctionApp.Services
         private async Task<LatestTweet> AddLatestTweetId(string recentId)
         {
             // The Azure Cosmos DB endpoint for running this sample.
-            string EndpointUri = @"https://hackathon22.documents.azure.com:443/";
+            //string EndpointUri = @"https://hackathon22.documents.azure.com:443/";
 
             // The primary key for the Azure Cosmos account.
-            string PrimaryKey = "bjRSRtPRWmqyinuTOtlna0rkOzAdpZtX5ZMWPPyJLudIfeqw8Fzn2RA2hIu7q9ed59NOqSQ4trUYUnaEhKaIzA==";
+            //string PrimaryKey = "bjRSRtPRWmqyinuTOtlna0rkOzAdpZtX5ZMWPPyJLudIfeqw8Fzn2RA2hIu7q9ed59NOqSQ4trUYUnaEhKaIzA==";
 
             string databaseId = "temp-db";
             string containerId = "latesttweet";
 
             // The Cosmos client instance
-            CosmosClient cosmosClient = new CosmosClient(EndpointUri, PrimaryKey, new CosmosClientOptions() { ApplicationName = "CosmosDBDotnetQuickstart" });
+            CosmosClient cosmosClient = new CosmosClient(_cosmosConnectionString, new CosmosClientOptions() { ApplicationName = "CosmosDBDotnetQuickstart" });
 
             // The database we will create
             Database database = await cosmosClient.CreateDatabaseIfNotExistsAsync(databaseId);

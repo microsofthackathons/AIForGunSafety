@@ -4,7 +4,9 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "SBUS_CONNECTIONSTRING": "Endpoint=sb://aigunsafetyhackathon.servicebus.windows.net/;SharedAccessKeyName=ListenOnly;SharedAccessKey=OPWaG1uJ6aQo3x9/igT2hn9eVi7XVudL2SMzHz6dn4A=",
-    "CosmosDBConnection": "AccountEndpoint=https://hackathon22.documents.azure.com:443/;AccountKey=bjRSRtPRWmqyinuTOtlna0rkOzAdpZtX5ZMWPPyJLudIfeqw8Fzn2RA2hIu7q9ed59NOqSQ4trUYUnaEhKaIzA==;"
+    "CosmosDBConnection": "AccountEndpoint=https://hackathon22.documents.azure.com:443/;AccountKey=bjRSRtPRWmqyinuTOtlna0rkOzAdpZtX5ZMWPPyJLudIfeqw8Fzn2RA2hIu7q9ed59NOqSQ4trUYUnaEhKaIzA==;",
+    "TwitterAuthKey": "AAAAAAAAAAAAAAAAAAAAABqvhAEAAAAA8XLgGmDV%2Fn7GT3zdTKKlHpjgnyw%3DPiVP5BHYHWVAj7NYhBwYFcdYjZIbV30eHlNAjHMepu5j9HElRo",
+    "AzureAnalyticsKey": "81b4fe85a0c041eb9ee7f8b9a5532055"
 
   }
 }

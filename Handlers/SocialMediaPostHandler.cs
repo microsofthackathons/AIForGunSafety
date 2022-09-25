@@ -4,6 +4,7 @@ using Azure;
 using Azure.AI.TextAnalytics;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -13,6 +14,13 @@ namespace AIForGunSafetyFunctionApp.Handlers
 {
     public class SocialMediaPostHandler
     {
+        private string _azureAnalyticsKey;
+
+        public SocialMediaPostHandler()
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+            _azureAnalyticsKey = appSettings["AzureAnalyticsKey"].ToString();
+        }
         public async Task ConsumeRecentSocialMediaPosts()
         {
             TwitterService twitterService = new TwitterService();
@@ -31,7 +39,7 @@ namespace AIForGunSafetyFunctionApp.Handlers
         {
             //TODO:Call sentiment api by passing text.
 
-            AzureKeyCredential credentials = new AzureKeyCredential("81b4fe85a0c041eb9ee7f8b9a5532055");
+            AzureKeyCredential credentials = new AzureKeyCredential(_azureAnalyticsKey);
             Uri endpoint = new Uri("https://hackathon22-sentiment-analysis.cognitiveservices.azure.com/");
             var client = new TextAnalyticsClient(endpoint, credentials);
             var documents = new List<string>
@@ -39,7 +47,7 @@ namespace AIForGunSafetyFunctionApp.Handlers
                 text
             };
 
-            AnalyzeSentimentResultCollection reviews = client.AnalyzeSentimentBatch(documents, options: new AnalyzeSentimentOptions()
+            AnalyzeSentimentResultCollection reviews = await client.AnalyzeSentimentBatchAsync(documents, options: new AnalyzeSentimentOptions()
             {
                 IncludeOpinionMining = true
             });
