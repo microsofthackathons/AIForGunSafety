@@ -21,6 +21,9 @@ using System.Configuration;
 namespace AIForGunSafetyFunctionApp.Services
 {
    
+    /// <summary>
+    /// Twitter service
+    /// </summary>
     public class TwitterService
     {
         private string _cosmosConnectionString;

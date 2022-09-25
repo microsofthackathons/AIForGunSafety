@@ -12,6 +12,9 @@ using Newtonsoft.Json;
 
 namespace AIForGunSafetyFunctionApp
 {
+    /// <summary>
+    /// Function app to call sentiment analysis
+    /// </summary>
     public class CallSentimentAPIFromTweetCosmos
     {
         [FunctionName("CallSentimentAPIFromTweetCosmos")]

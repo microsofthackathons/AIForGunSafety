@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace AIForGunSafetyFunctionApp.Handlers
 {
+    /// <summary>
+    /// Social media handler 
+    /// </summary>
     public class SocialMediaPostHandler
     {
         private string _azureAnalyticsKey;

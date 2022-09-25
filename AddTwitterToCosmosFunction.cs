@@ -6,6 +6,9 @@ using Microsoft.WindowsAzure.Storage.Queue.Protocol;
 
 namespace AIForGunSafetyFunctionApp
 {
+    /// <summary>
+    /// Function app to add social media feed to cosmos db.
+    /// </summary>
     public static class AddTwitterToCosmosFunction
     {
         [FunctionName("AddTwitterToCosmosFunction")]

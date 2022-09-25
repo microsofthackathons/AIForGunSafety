@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 
 namespace AIForGunSafetyFunctionApp
 {
+    /// <summary>
+    /// Function add to read social media posts.
+    /// </summary>
     public class RecentSocialMediaPosts
     {
         [FunctionName("RecentSocialMediaPosts")]
@@ -16,6 +19,7 @@ namespace AIForGunSafetyFunctionApp
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             SocialMediaPostHandler socialMediaPostHandler = new SocialMediaPostHandler();
             await socialMediaPostHandler.ConsumeRecentSocialMediaPosts();
+            log.LogInformation($"Social media post pulled successfully");
         }
     }
 }
