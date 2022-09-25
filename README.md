@@ -1,5 +1,5 @@
 
-[![CodeQL](https://github.com/microsofthackathons/AIForGunSafety/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/microsofthackathons/AIForGunSafety/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/microsofthackathons/AIForGunSafety/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/microsofthackathons/AIForGunSafety/actions/workflows/codeql-analysis.yml)[![DeployAiForGunSafetyFunctionApp](https://github.com/microsofthackathons/AIForGunSafety/actions/workflows/AiForGunSafetyFunctionApp.yml/badge.svg)](https://github.com/microsofthackathons/AIForGunSafety/actions/workflows/AiForGunSafetyFunctionApp.yml)
 
 # Gun Threat Detection from Social Media: 
 
